@@ -1,25 +1,16 @@
-import { Button, Text, View } from "react-native";
-import { router } from "expo-router";
-import { fontFamily } from "@/theme/fontFamily";
+import { HomeHeader } from "@/components/HomeHeader";
+import { View } from "react-native";
+
+const summary = {
+  total: "R$ 2.680,00",
+  input: { label: "Entradas", value: "R$ 6,184,90" },
+  output: { label: "Saídas", value: "-R$ 883,65" },
+};
 
 export default function Index() {
   return (
-    <View style={{ flex: 1, justifyContent: "center" }}>
-      <Text style={{ fontFamily: fontFamily.bold, fontSize: 34 }}>
-        Olá, expo router
-      </Text>
-
-      <Button title="Nova Meta" onPress={() => router.navigate("/target")} />
-
-      <Button
-        title="Transação"
-        onPress={() => router.navigate("/transaction/132")}
-      />
-
-      <Button
-        title="Progresso"
-        onPress={() => router.navigate("/in-progress/12")}
-      />
+    <View style={{ flex: 1 }}>
+      <HomeHeader data={summary} />
     </View>
   );
 }
