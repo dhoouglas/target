@@ -33,15 +33,13 @@ export function List<T>({
         data={data}
         renderItem={renderItem}
         ItemSeparatorComponent={() => <Separator color={colors.gray[200]} />}
-        showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContent}
+        showsVerticalScrollIndicator={false}
         ListEmptyComponent={() => (
           <Text style={styles.empty}>{emptyMessage}</Text>
         )}
         {...rest}
       />
-
-      <Text style={styles.empty}>{emptyMessage}</Text>
     </View>
   );
 }
