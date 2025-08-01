@@ -6,23 +6,18 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-
   listContent: {
-    gap: 16,
-    paddingTop: 16,
     paddingBottom: 72,
   },
-
   title: {
     marginTop: 24,
-    marginBottom: 16,
+    paddingBottom: 16,
     borderBottomWidth: 1,
     borderBottomColor: colors.gray[200],
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: fontFamily.medium,
     color: colors.black,
   },
-
   empty: {
     fontSize: 14,
     color: colors.gray[600],
