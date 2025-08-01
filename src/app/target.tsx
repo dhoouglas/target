@@ -24,7 +24,7 @@ export default function Target() {
           placeholder="Ex: Viagem para pria, Apple Watch"
         />
 
-        <CurrencyInput label="Valor alvo" value={24300.73} />
+        <CurrencyInput label="Valor alvo (R$)" value={24300.73} />
 
         <Button title="Salvar" />
       </View>
