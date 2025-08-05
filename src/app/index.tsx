@@ -1,9 +1,14 @@
-import { View, StatusBar } from "react-native";
+import { View, StatusBar, Alert } from "react-native";
 import { HomeHeader } from "@/components/HomeHeader";
 import { List } from "@/components/List";
-import { Target } from "@/components/Target";
+import { Target, TargetProps } from "@/components/Target";
 import { Button } from "@/components/Button";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
+
+import { useTargetDatabase } from "@/database/useTargetDatabase";
+import { useCallback, useState } from "react";
+import { Loading } from "@/components/Loading";
+import { numberToCurrency } from "@/utils/numberToCurrency";
 
 const summary = {
   total: "R$ 2.680,00",
@@ -11,31 +16,47 @@ const summary = {
   output: { label: "Saídas", value: "-R$ 883,65" },
 };
 
-const targets = [
-  {
-    id: "1",
-    name: "Apple watch",
-    current: "R$ 580,00",
-    percentage: "50%",
-    target: "R$ 1.790,00",
-  },
-  {
-    id: "2",
-    name: "Comprar uma cadeira ergonômica",
-    current: "R$ 900,00",
-    percentage: "75%",
-    target: "R$ 1.200,00",
-  },
-  {
-    id: "3",
-    name: "Fazer uma viagem para o Rio de Janeiro",
-    current: "R$ 1200,00",
-    percentage: "75%",
-    target: "R$ 3.000,00",
-  },
-];
-
 export default function Index() {
+  const [isFetching, setIsFetching] = useState(true);
+  const [targets, setTargets] = useState<TargetProps[]>([]);
+  const targetDatabase = useTargetDatabase();
+
+  async function fetchTargets(): Promise<TargetProps[]> {
+    try {
+      const response = await targetDatabase.listBySavedValue();
+      return response.map((item) => ({
+        id: String(item.id),
+        name: item.name,
+        current: numberToCurrency(item.current),
+        percentage: item.percentage.toFixed(0) + "%",
+        target: numberToCurrency(item.amount),
+      }));
+    } catch (error) {
+      Alert.alert("Erro", "Não foi possível carregar as metas.");
+      console.log(error);
+    }
+  }
+
+  async function fetchDate() {
+    const targetDataPromise = fetchTargets();
+
+    const [targetData] = await Promise.all([targetDataPromise]);
+
+    setTargets(targetData);
+
+    setIsFetching(false);
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchDate();
+    }, [])
+  );
+
+  if (isFetching) {
+    return <Loading />;
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <StatusBar
