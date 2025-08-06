@@ -68,7 +68,7 @@ export function useTargetDatabase() {
     const statement = await database.prepareAsync(`
       UPDATE targets SET 
       name = $name, 
-      amount = $amount 
+      amount = $amount, 
       updated_at = CURRENT_TIMESTAMP
       WHERE id = $id
       `);
@@ -80,5 +80,9 @@ export function useTargetDatabase() {
     });
   }
 
-  return { create, update, show, listBySavedValue };
+  async function remove(id: number) {
+    await database.runAsync(`DELETE FROM targets WHERE id = ?`, id);
+  }
+
+  return { create, update, show, remove, listBySavedValue };
 }
